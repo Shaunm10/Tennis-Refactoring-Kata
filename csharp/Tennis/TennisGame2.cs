@@ -8,11 +8,6 @@ public class TennisGame2 : ITennisGame
     private int player1Points;
     private int player2Points;
 
-    // private string player1Result = "";
-    // private string player2Result = "";
-    // private string player1Name;
-    // private string player2Name;
-
     private const string Love = "Love";
     private const string Fifteen = "Fifteen";
     private const string Thirty = "Thirty";
@@ -24,10 +19,8 @@ public class TennisGame2 : ITennisGame
 
     public TennisGame2(string player1Name, string player2Name)
     {
-        // this.player1Name = player1Name;
         player1Points = 0;
         player2Points = 0;
-        //this.player2Name = player2Name;
     }
 
     public string GetScore()
@@ -36,11 +29,11 @@ public class TennisGame2 : ITennisGame
 
         var result = gameMode switch
         {
-            GameScoreMode.TieScore => GetTieScoreResult(),
+            GameScoreMode.TieScore => this.GetTieScoreResult(),
             GameScoreMode.Advantage => this.GetAdvantageResult(),
-            GameScoreMode.BelowFour => GetBelowFourResult(),
+            GameScoreMode.BelowFour => this.GetBelowFourResult(),
             GameScoreMode.Winner => this.GetWinnerResult(),
-            _ => "Default"
+            _ => "GameScoreMode Not Found"
 
         };
 
