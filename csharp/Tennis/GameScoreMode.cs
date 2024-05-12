@@ -3,7 +3,7 @@ namespace Tennis;
 public enum GameScoreMode
 {
     TieScore,
-    BelowFour,
+    GameInProgress,
     Winner,
     Advantage
 }

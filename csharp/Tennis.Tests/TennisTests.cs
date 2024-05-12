@@ -43,7 +43,7 @@ namespace Tennis.Tests
             new object[] {14, 16, "Win for player2"},
             
             
-            // // advantage
+            // advantage
             new object[] {4, 3, "Advantage player1"},
             new object[] {3, 4, "Advantage player2"},
             new object[] {5, 4, "Advantage player1"},

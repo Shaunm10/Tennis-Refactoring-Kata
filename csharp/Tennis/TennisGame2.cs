@@ -5,44 +5,84 @@ namespace Tennis;
 
 public class TennisGame2 : ITennisGame
 {
-    private int player1Points;
-    private int player2Points;
 
+    /// <summary>
+    /// The number points player 1 has.
+    /// </summary>
+    private int playerOnePoints;
+
+    /// <summary>
+    /// The number points player 2 has.
+    /// </summary>
+    private int playerTwoPoints;
+
+
+    /// <summary>
+    /// Represents a score of "0".
+    /// </summary>
     private const string Love = "Love";
+
+    /// <summary>
+    /// Represents a score of "1".
+    /// </summary>
     private const string Fifteen = "Fifteen";
+
+    /// <summary>
+    /// Represents a score of "2".
+    /// </summary>
     private const string Thirty = "Thirty";
-    private const string Deuce = "Deuce";
+
+    /// <summary>
+    /// Represents a score of "3".
+    /// </summary>
     private const string Forty = "Forty";
 
+    /// <summary>
+    /// Represents a tied score.
+    /// </summary>
+    private const string Deuce = "Deuce";
+
+    /// <summary>
+    /// 
+    /// </summary>
     private const string All = "All";
 
 
     public TennisGame2(string player1Name, string player2Name)
     {
-        player1Points = 0;
-        player2Points = 0;
+        playerOnePoints = 0;
+        playerTwoPoints = 0;
     }
 
     public string GetScore()
     {
         GameScoreMode gameMode = this.CalculateGameScoreMode();
 
-        var result = gameMode switch
+        var gameScore = gameMode switch
         {
             GameScoreMode.TieScore => this.GetTieScoreResult(),
             GameScoreMode.Advantage => this.GetAdvantageResult(),
-            GameScoreMode.BelowFour => this.GetBelowFourResult(),
+            GameScoreMode.GameInProgress => this.GetGameInProgressResult(),
             GameScoreMode.Winner => this.GetWinnerResult(),
             _ => "GameScoreMode Not Found"
-
         };
 
-        return result;
+        return gameScore;
+    }
+
+    public void SetP1Score(int number)
+    {
+        IncrementPlayerOneScore(number);
+    }
+
+    public void SetP2Score(int number)
+    {
+        IncrementPlayerTwoScore(number);
     }
 
     private string GetAdvantageResult()
     {
-        if (this.player1Points > this.player2Points)
+        if (this.playerOnePoints > this.playerTwoPoints)
         {
             return "Advantage player1";
         }
@@ -51,16 +91,16 @@ public class TennisGame2 : ITennisGame
 
     private string GetWinnerResult()
     {
-        if (this.player1Points > this.player2Points)
+        if (this.playerOnePoints > this.playerTwoPoints)
         {
             return "Win for player1";
         }
         return "Win for player2";
     }
 
-    private string GetBelowFourResult()
+    private string GetGameInProgressResult()
     {
-        return $"{TranslateScoreToName(this.player1Points)}-{TranslateScoreToName(this.player2Points)}";
+        return $"{TranslateScoreToName(this.playerOnePoints)}-{TranslateScoreToName(this.playerTwoPoints)}";
 
         string TranslateScoreToName(int score)
         {
@@ -89,7 +129,7 @@ public class TennisGame2 : ITennisGame
     private string GetTieScoreResult()
     {
         var result = string.Empty;
-        switch (this.player1Points)
+        switch (this.playerOnePoints)
         {
             case 0:
                 result = $"{Love}-{All}";
@@ -111,19 +151,19 @@ public class TennisGame2 : ITennisGame
 
     private GameScoreMode CalculateGameScoreMode()
     {
-        var hasWinningScoreBeenReached = this.player1Points > 3 || this.player2Points > 3;
+        var hasWinningScoreBeenReached = this.playerOnePoints > 3 || this.playerTwoPoints > 3;
 
-        if (this.player1Points == this.player2Points)
+        if (this.playerOnePoints == this.playerTwoPoints)
         {
             return GameScoreMode.TieScore;
         }
 
-        if (this.player1Points < 4 && this.player1Points < 4 && !hasWinningScoreBeenReached)
+        if (this.playerOnePoints < 4 && this.playerOnePoints < 4 && !hasWinningScoreBeenReached)
         {
-            return GameScoreMode.BelowFour;
+            return GameScoreMode.GameInProgress;
         }
 
-        var pointDifference = Math.Abs(player1Points - player2Points);
+        var pointDifference = Math.Abs(playerOnePoints - playerTwoPoints);
         if (pointDifference > 1)
         {
             return GameScoreMode.Winner;
@@ -132,32 +172,21 @@ public class TennisGame2 : ITennisGame
         return GameScoreMode.Advantage;
     }
 
-    public void SetP1Score(int number)
+    private void IncrementPlayerOneScore(int score)
     {
-        P1Score(number);
-
+        playerOnePoints += score;
     }
 
-    public void SetP2Score(int number)
+    private void IncrementPlayerTwoScore(int score)
     {
-        P2Score(number);
-    }
-
-    private void P1Score(int score)
-    {
-        player1Points += score;
-    }
-
-    private void P2Score(int score)
-    {
-        player2Points += score;
+        playerTwoPoints += score;
     }
 
     public void WonPoint(string player)
     {
         if (player == "player1")
-            P1Score(1);
+            IncrementPlayerOneScore(1);
         else
-            P2Score(1);
+            IncrementPlayerTwoScore(1);
     }
 }
